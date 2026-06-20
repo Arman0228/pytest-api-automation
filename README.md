@@ -18,8 +18,8 @@ lib/                  # Legacy слой (MyRequests) — совместимос�
 ## Быстрый старт
 
 ```bash
-git clone https://github.com/Arman0228/PythonAPI.git
-cd PythonAPI
+git clone https://github.com/Arman0228/pytest-api-automation.git
+cd pytest-api-automation
 python -m venv .venv && source .venv/bin/activate
 pip install -r requirements.txt
 cp .env.example .env
