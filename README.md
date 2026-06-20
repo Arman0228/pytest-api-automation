@@ -2,17 +2,24 @@
 
 API-тесты для [LearnQA Playground](https://playground.learnqa.ru/) на **PyTest + requests + Allure**.
 
-Демонстрирует современную структуру: fluent API-клиент, pydantic-settings, JSON Schema, pytest fixtures.
+Fluent API-клиент, pydantic-settings, positive/negative классы (как в enterprise-фреймворках).
 
 ## Архитектура
 
 ```
-api/clients/          # Fluent API clients (BaseApi, UserApiClient)
-config/settings.py    # Pydantic Settings (ENV → base URL)
-tests/user/data.py    # Test data builders
-tests/conftest.py     # Fixtures: api, auth_session
-resources/schemas/    # JSON Schema для валидации ответов
-lib/                  # Legacy слой (MyRequests) — совместимость
+api/clients/              # Fluent API clients (BaseApi, UserApiClient)
+config/settings.py        # Pydantic Settings (ENV → base URL)
+tests/user/
+  auth/                   # TestPositiveUserAuth / TestNegativeUserAuth
+  register/               # TestPositiveUserRegister / TestNegativeUserRegister
+  get/                    # TestPositiveUserGet / TestNegativeUserGet
+  edit/                   # TestPositiveUserEdit / TestNegativeUserEdit
+  delete/                 # TestPositiveUserDelete / TestNegativeUserDelete
+  data.py                 # Test data builders
+  helpers.py              # register_user / login_user
+tests/conftest.py         # Fixtures: api, auth_session
+resources/schemas/        # JSON Schema
+lib/                      # Legacy слой (MyRequests) — backward compatibility
 ```
 
 ## Быстрый старт
@@ -36,17 +43,21 @@ pytest tests/ -v
 ## Пример fluent-клиента
 
 ```python
-def test_auth_user(api, auth_session):
-    api.auth(auth_session.token, auth_session.auth_sid)
-    api.response_json_value_by_name_should_be("user_id", auth_session.user_id)
+class TestPositiveUserAuth:
+    @pytest.mark.positive
+    def test_positive_auth_user(self, api, auth_session):
+        api.auth(auth_session.token, auth_session.auth_sid)
+        api.response_json_value_by_name_should_be("user_id", auth_session.user_id)
 ```
 
 ## Запуск
 
 ```bash
-pytest tests/test_user_auth.py -v          # auth suite
-pytest -m smoke -v                         # smoke markers
-pytest tests/ --alluredir=allure-results   # with Allure
+pytest -m positive -v              # только позитивные
+pytest -m negative -v              # только негативные
+pytest -m smoke -v                 # smoke suite
+pytest tests/user/auth/ -v         # auth feature
+pytest tests/ --alluredir=allure-results
 ```
 
 ## CI

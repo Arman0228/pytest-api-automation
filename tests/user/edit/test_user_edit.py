@@ -1,4 +1,5 @@
 import allure
+import pytest
 
 from api.clients.user_api_client import UserApiClient
 from tests.user.helpers import login_user, register_user
@@ -6,13 +7,15 @@ from tests.user.helpers import login_user, register_user
 
 @allure.epic("User management")
 @allure.feature("User editing")
-class TestUserEdit:
+class TestPositiveUserEdit:
 
+    @allure.label("section2", "Positive")
     @allure.story("Positive edit scenario")
     @allure.severity(allure.severity_level.CRITICAL)
-    @allure.description("Edit just created user with valid data")
     @allure.tag("smoke", "regression", "positive")
-    def test_edit_just_created_user(self, api: UserApiClient):
+    @pytest.mark.positive
+    @pytest.mark.smoke
+    def test_positive_edit_just_created_user(self, api: UserApiClient):
         register_data, user_id = register_user(api)
         session = login_user(api, register_data["email"], register_data["password"])
 
@@ -25,11 +28,18 @@ class TestUserEdit:
             "firstName", new_name, "First name was not changed"
         )
 
+
+@allure.epic("User management")
+@allure.feature("User editing")
+class TestNegativeUserEdit:
+
+    @allure.label("section2", "Negative")
     @allure.story("Security tests")
     @allure.severity(allure.severity_level.BLOCKER)
-    @allure.description("Unauthorized user edit attempt")
     @allure.tag("security", "regression", "negative")
-    def test_edit_user_unauthorized(self, api: UserApiClient):
+    @pytest.mark.negative
+    @pytest.mark.security
+    def test_negative_edit_user_unauthorized(self, api: UserApiClient):
         register_data, user_id = register_user(api)
         session = login_user(api, register_data["email"], register_data["password"])
 
@@ -43,11 +53,13 @@ class TestUserEdit:
             "First name was changed despite unauthorized access",
         )
 
+    @allure.label("section2", "Negative")
     @allure.story("Security tests")
     @allure.severity(allure.severity_level.BLOCKER)
-    @allure.description("Edit user as different user")
     @allure.tag("security", "regression", "negative")
-    def test_edit_user_as_different_user(self, api: UserApiClient):
+    @pytest.mark.negative
+    @pytest.mark.security
+    def test_negative_edit_user_as_different_user(self, api: UserApiClient):
         register_data1, user_id_to_edit = register_user(api)
         session1 = login_user(api, register_data1["email"], register_data1["password"])
 
@@ -69,11 +81,12 @@ class TestUserEdit:
             "First name was changed by another user",
         )
 
+    @allure.label("section2", "Negative")
     @allure.story("Validation tests")
     @allure.severity(allure.severity_level.NORMAL)
-    @allure.description("Edit with invalid email format")
     @allure.tag("validation", "regression", "negative")
-    def test_edit_email_invalid_format(self, api: UserApiClient):
+    @pytest.mark.negative
+    def test_negative_edit_email_invalid_format(self, api: UserApiClient):
         register_data, user_id = register_user(api)
         session = login_user(api, register_data["email"], register_data["password"])
         email = register_data["email"]
@@ -91,11 +104,12 @@ class TestUserEdit:
             "email", email, "Email was changed to invalid format"
         )
 
+    @allure.label("section2", "Negative")
     @allure.story("Validation tests")
     @allure.severity(allure.severity_level.NORMAL)
-    @allure.description("Edit with too short first name")
     @allure.tag("validation", "regression", "negative")
-    def test_edit_firstname_too_short(self, api: UserApiClient):
+    @pytest.mark.negative
+    def test_negative_edit_firstname_too_short(self, api: UserApiClient):
         register_data, user_id = register_user(api)
         session = login_user(api, register_data["email"], register_data["password"])
 

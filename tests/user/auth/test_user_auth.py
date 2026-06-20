@@ -7,17 +7,15 @@ from tests.user.session import AuthSession
 
 @allure.epic("Authorization cases")
 @allure.feature("User authentication")
-class TestUserAuth:
-    exclude_params = [
-        ("no_cookie", allure.severity_level.NORMAL),
-        ("no_token", allure.severity_level.NORMAL),
-    ]
+class TestPositiveUserAuth:
 
+    @allure.label("section2", "Positive")
     @allure.story("Successful authentication")
     @allure.severity(allure.severity_level.BLOCKER)
     @allure.tag("smoke", "positive", "authentication")
-    @allure.description("Authorize user by email and password, validate session via /user/auth")
-    def test_auth_user(self, api: UserApiClient, auth_session: AuthSession):
+    @pytest.mark.positive
+    @pytest.mark.smoke
+    def test_positive_auth_user(self, api: UserApiClient, auth_session: AuthSession):
         api.auth(auth_session.token, auth_session.auth_sid)
         api.response_json_value_by_name_should_be(
             "user_id",
@@ -25,10 +23,21 @@ class TestUserAuth:
             "User id from auth method is not equal to user id from check method",
         )
 
+
+@allure.epic("Authorization cases")
+@allure.feature("User authentication")
+class TestNegativeUserAuth:
+    exclude_params = [
+        ("no_cookie", allure.severity_level.NORMAL),
+        ("no_token", allure.severity_level.NORMAL),
+    ]
+
+    @allure.label("section2", "Negative")
     @allure.story("Negative authentication scenarios")
     @allure.severity(allure.severity_level.CRITICAL)
     @allure.tag("security", "negative", "authentication")
-    @allure.description("Authorization status without auth cookie or CSRF token")
+    @pytest.mark.negative
+    @pytest.mark.security
     @pytest.mark.parametrize("condition,severity", exclude_params)
     def test_negative_auth_check(
         self, api: UserApiClient, auth_session: AuthSession, condition: str, severity

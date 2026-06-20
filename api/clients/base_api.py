@@ -152,6 +152,13 @@ class BaseApi:
         )
         return self
 
+    def response_text_should_contain(self, substring: str) -> "BaseApi":
+        assert self.response is not None
+        assert substring in self.response.text, (
+            f"Expected substring '{substring}' in response: {self.response.text}"
+        )
+        return self
+
     def response_body_should_match_schema(self, schema_path: Path) -> "BaseApi":
         schema = json.loads(schema_path.read_text(encoding="utf-8"))
         validate(instance=self._json(), schema=schema)

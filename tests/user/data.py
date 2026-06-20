@@ -18,3 +18,5 @@ DEFAULT_TEST_USER = {
     "email": "vinkotov@example.com",
     "password": "1234",
 }
+
+EXISTING_USER_EMAIL = "vinkotov@example.com"
