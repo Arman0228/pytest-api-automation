@@ -1,24 +1,22 @@
-import os
+from config.settings import settings
+
 
 class Environment:
-    DEV = 'DEV'
-    PROD = 'PROD'
+    """Backward-compatible wrapper around pydantic settings."""
+
+    DEV = "DEV"
+    PROD = "PROD"
 
     URLS = {
-        DEV: 'https://playground.learnqa.ru/api_dev',
-        PROD: 'https://playground.learnqa.ru/api'
+        DEV: "https://playground.learnqa.ru/api_dev",
+        PROD: "https://playground.learnqa.ru/api",
     }
 
-    def __init__(self):
-        try:
-            self.env = os.environ['ENV']
-        except KeyError:
-            self.env = Environment.DEV
+    def __init__(self) -> None:
+        self.env = settings.env.value
 
-    def get_base_url(self):
-        if self.env in self.URLS:
-            return self.URLS[self.env]
-        else:
-            raise Exception(f"Unknown value of ENV variable: {self.env}")
+    def get_base_url(self) -> str:
+        return settings.get_base_url()
+
 
 ENV_OBJECT = Environment()

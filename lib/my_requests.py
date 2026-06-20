@@ -2,7 +2,7 @@ from typing import Optional
 from lib.logger import Logger
 import allure
 import requests
-from environment import ENV_OBJECT
+from config.settings import settings
 
 
 class MyRequests:
@@ -29,7 +29,7 @@ class MyRequests:
 
     @staticmethod
     def _send(url: str, data: dict, headers: dict, cookies: dict, method: str):
-        url = f"{ENV_OBJECT.get_base_url()}{url}"
+        url = f"{settings.get_base_url()}{url}"
 
         if data is None:
             data = {}

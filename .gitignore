@@ -1,4 +1,16 @@
+# IDE
 .idea
+
+# Python
+.venv
+__pycache__
 .pytest_cache
-__pycache__/
+
+# Logs & artifacts
 logs/*
+test_results/
+allure-results/
+allure-report/
+
+# Local env
+.env
