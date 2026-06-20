@@ -3,6 +3,7 @@ import allure
 
 from api.clients.user_api_client import UserApiClient
 from tests.user.data import EXISTING_USER_EMAIL, build_registration_body
+from tests.user.paths import SCHEMAS_DIR
 
 
 @allure.epic("User registration")
@@ -18,7 +19,9 @@ class TestPositiveUserRegister:
     def test_positive_create_user_successfully(self, api: UserApiClient):
         data = build_registration_body()
         api.register(data)
-        api.response_status_code_should_be(200).response_json_should_have_key("id")
+        api.response_status_code_should_be(200).response_json_should_have_key(
+            "id"
+        ).response_body_should_match_schema(SCHEMAS_DIR / "user_register_200.json")
 
 
 @allure.epic("User registration")

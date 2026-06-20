@@ -4,6 +4,14 @@ API-тесты для [LearnQA Playground](https://playground.learnqa.ru/) на 
 
 Fluent API-клиент, pydantic-settings, positive/negative классы (как в enterprise-фреймворках).
 
+## Portfolio
+
+| Проект | Описание |
+|--------|----------|
+| **API** (этот repo) | [pytest-api-automation](https://github.com/Arman0228/pytest-api-automation) |
+| **UI** | [playwright-ui-automation](https://github.com/Arman0228/playwright-ui-automation) |
+| **LLM QA** | [llm-qa-automation-framework](https://github.com/Arman0228/llm-qa-automation-framework) |
+
 ## Архитектура
 
 ```
@@ -18,8 +26,9 @@ tests/user/
   data.py                 # Test data builders
   helpers.py              # register_user / login_user
 tests/conftest.py         # Fixtures: api, auth_session
+helpers/                  # Request logging
 resources/schemas/        # JSON Schema
-lib/                      # Legacy слой (MyRequests) — backward compatibility
+tests/user/paths.py       # SCHEMAS_DIR constant
 ```
 
 ## Быстрый старт

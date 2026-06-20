@@ -8,7 +8,7 @@ from jsonschema import validate
 from requests import Response
 
 from config.settings import settings
-from lib.logger import Logger
+from helpers.request_logger import RequestLogger
 
 
 class BaseApi:
@@ -32,7 +32,7 @@ class BaseApi:
         url = self._full_url(path)
 
         with allure.step(f"{method} {path}"):
-            Logger.add_request(url, data, headers, cookies, method)
+            RequestLogger.add_request(url, data, headers, cookies, method)
             if method == "GET":
                 self.response = requests.get(url, headers=headers, cookies=cookies, params=data)
             elif method == "POST":
@@ -43,7 +43,7 @@ class BaseApi:
                 self.response = requests.delete(url, headers=headers, cookies=cookies, data=data)
             else:
                 raise ValueError(f"Unsupported HTTP method: {method}")
-            Logger.add_response(self.response)
+            RequestLogger.add_response(self.response)
 
         return self
 

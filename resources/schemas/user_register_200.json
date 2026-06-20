@@ -1,8 +1,8 @@
 {
   "type": "object",
-  "required": ["user_id"],
+  "required": ["id"],
   "properties": {
-    "user_id": {
+    "id": {
       "oneOf": [
         {"type": "integer"},
         {"type": "string", "pattern": "^[0-9]+$"}

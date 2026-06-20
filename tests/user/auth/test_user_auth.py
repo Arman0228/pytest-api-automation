@@ -1,7 +1,8 @@
-import pytest
 import allure
+import pytest
 
 from api.clients.user_api_client import UserApiClient
+from tests.user.paths import SCHEMAS_DIR
 from tests.user.session import AuthSession
 
 
@@ -21,7 +22,7 @@ class TestPositiveUserAuth:
             "user_id",
             auth_session.user_id,
             "User id from auth method is not equal to user id from check method",
-        )
+        ).response_body_should_match_schema(SCHEMAS_DIR / "user_auth_200.json")
 
 
 @allure.epic("Authorization cases")
