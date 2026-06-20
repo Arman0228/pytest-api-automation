@@ -119,6 +119,12 @@ class BaseApi:
         assert key in body, f"JSON key '{key}' not found"
         return self
 
+    def response_json_should_have_keys(self, keys: list[str]) -> "BaseApi":
+        body = self._json()
+        for key in keys:
+            assert key in body, f"JSON key '{key}' not found"
+        return self
+
     def response_json_should_not_have_key(self, key: str) -> "BaseApi":
         body = self._json()
         assert key not in body, f"JSON key '{key}' should be absent"
@@ -130,6 +136,20 @@ class BaseApi:
         body = self._json()
         assert name in body, f"JSON key '{name}' not found"
         assert body[name] == expected, message or f"{name} != {expected}"
+        return self
+
+    def response_status_code_should_be_one_of(self, expected: tuple[int, ...]) -> "BaseApi":
+        assert self.response is not None
+        assert self.response.status_code in expected, (
+            f"Expected one of {expected}, got {self.response.status_code}"
+        )
+        return self
+
+    def response_text_should_be(self, expected: str) -> "BaseApi":
+        assert self.response is not None
+        assert self.response.text == expected, (
+            f"Expected text '{expected}', got '{self.response.text}'"
+        )
         return self
 
     def response_body_should_match_schema(self, schema_path: Path) -> "BaseApi":

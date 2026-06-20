@@ -3,7 +3,7 @@ from api.clients.base_api import BaseApi
 
 class UserApiClient(BaseApi):
     def register(self, data: dict) -> "UserApiClient":
-        return self.post("/user/", data=data)
+        return self.post("/user", data=data)
 
     def login(self, email: str, password: str) -> "UserApiClient":
         return self.post("/user/login", data={"email": email, "password": password})
